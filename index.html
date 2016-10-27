@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>查询IP归属地</title>
+	</head>
+	<body>
+		<input type="text" id="inp" />
+		<input type="button" id="btn" value="查询"  />
+		<br />归属地是：<span id="res"></span>
+		
+		<script type="text/javascript">
+			function showResult(data){
+				var spanRes = document.getElementById('res');
+				if(data.success == "1"){
+					var result = data.result;
+					// 成功查询到的话，将归属地显示在页面上					
+					spanRes.innerHTML = result.detailed;
+				} else {
+					// 服务器查询不到，则显示错误信息
+					spanRes.innerHTML = data.msg;
+				}
+			}
+		</script>
+		<script type="text/javascript">
+			window.onload = function (){
+				var inp = document.getElementById('inp');
+				var btn = document.getElementById('btn');
+				btn.onclick = function (){
+					// 获取到输入框中输入的IP地址
+					var ip = inp.value;
+					
+					// 创建一个script标签
+					var script = document.createElement('script');
+					script.src = "http://api.k780.com:88/?app=ip.get" + 
+					     "&ip=" + ip + 
+					     "&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json" + 
+					     "&jsoncallback=showResult";
+					
+					// 将script标签放到head中 使之生效
+					var head = document.getElementsByTagName('head')[0];
+					head.appendChild(script); // 这个执行后，创建的script标签将生效，浏览器会根据指定的src去获取js代码文件
+				}
+				
+			}
+		</script>
+	</body>
+</html>
